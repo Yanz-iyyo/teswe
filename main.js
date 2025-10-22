@@ -151,7 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
             this.elements.botNameInfo.textContent = botInfo.first_name;
             this.elements.botUsername.textContent = `@${botInfo.username}`;
             this.elements.editBotName.value = botInfo.first_name;
-            this.elements.editBotBio.value.trim() = descriptionInfo?.description || '';
+            // Perbaikan: Tetapkan nilai ke elemen input, lalu gunakan .trim() jika diperlukan untuk perbandingan
+            this.elements.editBotBio.value = descriptionInfo?.description || '';
             this.elements.botPhoto.style.backgroundImage = 'none';
             if (profilePhotos?.total_count > 0) {
                 const fileId = profilePhotos.photos[0][0].file_id;
@@ -351,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.log(`File dipilih: ${this.state.selectedFile.name}`, 'info');
                 }
             });
-            this.elements.sendOnceBtn.addEventListener('click', () => this.handleSendOnce());
+                     this.elements.sendOnceBtn.addEventListener('click', () => this.handleSendOnce());
             this.elements.startSpamBtn.addEventListener('click', () => this.startSpam());
             this.elements.stopSpamBtn.addEventListener('click', () => this.stopSpam());
             this.elements.messageMonitor.addEventListener('click', (e) => {

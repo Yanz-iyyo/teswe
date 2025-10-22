@@ -8,7 +8,6 @@
     --accent-color: #6366f1;
     --accent-hover-color: #4f46e5;
 }
-
 html.dark {
     --bg-color: #020617;
     --card-color: #0f172a;
@@ -17,56 +16,44 @@ html.dark {
     --border-color: #1e293b;
     --input-bg-color: #1e293b;
 }
-
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
 }
-
 .form-input, .form-textarea {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .form-input:focus, .form-textarea:focus {
     --tw-ring-color: var(--accent-color);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 25%, transparent);
     border-color: var(--accent-color);
 }
-
 .btn {
     transition: all 0.2s ease-out;
 }
-
 .btn:hover:not(:disabled) {
     transform: scale(1.03);
     filter: brightness(1.1);
 }
-
 .btn:active:not(:disabled) {
     transform: scale(0.98);
     filter: brightness(0.9);
 }
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 .fade-in { animation: fadeIn 0.5s ease-out forwards; }
-
 @keyframes toastIn {
     from { transform: translateX(calc(100% + 1.25rem)); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
-
 @keyframes toastOut {
     to { transform: translateX(calc(100% + 1.25rem)); opacity: 0; }
 }
-
 .toast { animation: toastIn 0.5s cubic-bezier(0.21, 1.02, 0.73, 1) forwards; }
 .toast.removing { animation: toastOut 0.5s cubic-bezier(0.25, 0, 0.5, -0.2) forwards; }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { animation: spin 0.8s linear infinite; }

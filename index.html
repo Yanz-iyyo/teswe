@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Kontrol Bot - YanzXD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'background': 'var(--bg-color)',
+                        'card': 'var(--card-color)',
+                        'text': 'var(--text-color)',
+                        'text-muted': 'var(--text-muted-color)',
+                        'border': 'var(--border-color)',
+                        'input-bg': 'var(--input-bg-color)',
+                        'accent': 'var(--accent-color)',
+                        'accent-hover': 'var(--accent-hover-color)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased bg-background text-text">
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-3">
+                <i class="ph-duotone ph-rocket-launch text-5xl text-accent"></i>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold">Bot Control Panel</h1>
+                    <p class="text-sm text-text-muted">Powerd By YanzXD</p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="btn p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+                <i id="theme-icon" class="ph-duotone ph-sun text-2xl"></i>
+            </button>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1 space-y-6">
+                <div class="card bg-card border border-border p-6 rounded-xl shadow-lg space-y-4 fade-in">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="ph-duotone ph-gear-six"></i> Pengaturan Bot
+                    </h2>
+                    <input type="username" id="botToken" class="form-input bg-input-bg border border-border w-full p-3 rounded-lg" placeholder="1. Masukkan Token Bot">
+                    <div id="botInfoPanel" class="hidden p-4 rounded-lg bg-background space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div id="botPhoto" class="w-16 h-16 rounded-full bg-slate-400 dark:bg-slate-600 flex-shrink-0 bg-cover bg-center"></div>
+                            <div>
+                                <p id="botNameInfo" class="font-bold text-lg"></p>
+                                <p id="botUsername" class="text-sm text-text-muted"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold">Nama Bot</label>
+                            <input type="text" id="editBotName" class="form-input bg-input-bg border border-border w-full p-2 mt-1 rounded-md text-sm">
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold">Deskripsi (Bio)</label>
+                            <textarea id="editBotBio" rows="3" class="form-textarea bg-input-bg border border-border w-full p-2 mt-1 rounded-md text-sm"></textarea>
+                        </div>
+                        <button id="saveProfileBtn" class="btn w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2">Simpan Teks Profil</button>
+                        <div class="pt-4 border-t border-border space-y-2">
+                            <label for="newProfilePhotoInput" class="text-sm font-semibold">Ganti Foto Profil</label>
+                            <input type="file" id="newProfilePhotoInput" class="block w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover" accept="image/png, image/jpeg">
+                            <button id="savePhotoBtn" class="btn w-full bg-accent-hover text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 mt-2">Update Foto</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-card border border-border p-6 rounded-xl shadow-lg space-y-4 fade-in" style="animation-delay: 100ms;">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="ph-duotone ph-terminal-window"></i> Log Aktivitas
+                    </h2>
+                    <div id="statusLog" class="h-64 bg-slate-200 dark:bg-slate-900/50 rounded-md p-3 text-sm font-mono overflow-y-auto">
+                        <p class="text-text-muted">Menunggu tindakan...</p>
+                    </div>
+                    <button id="clearLogBtn" class="btn w-full text-xs py-2 bg-slate-200 dark:bg-slate-700/50 hover:bg-slate-300 dark:hover:bg-slate-600">Bersihkan Log</button>
+                </div>
+            </div>
+            <div class="lg:col-span-1 space-y-6">
+                <div class="card bg-card border border-border p-6 rounded-xl shadow-lg space-y-4 fade-in" style="animation-delay: 200ms;">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="ph-duotone ph-paper-plane-tilt"></i> Panel Pengiriman
+                    </h2>
+                    <input type="text" id="chatId" class="form-input bg-input-bg border border-border w-full p-3 rounded-lg" placeholder="2. Masukkan Chat ID Tujuan">
+                    <div id="media-tabs" class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <button data-tab="text" class="btn tab-button p-3 font-semibold rounded-lg flex items-center justify-center gap-2 bg-accent text-white">
+                            <i class="ph ph-text-t"></i> Teks
+                        </button>
+                        <button data-tab="photo" class="btn tab-button p-3 font-semibold rounded-lg flex items-center justify-center gap-2 bg-input-bg text-text-muted">
+                            <i class="ph ph-image"></i> Foto
+                        </button>
+                        <button data-tab="video" class="btn tab-button p-3 font-semibold rounded-lg flex items-center justify-center gap-2 bg-input-bg text-text-muted">
+                            <i class="ph ph-video"></i> Video
+                        </button>
+                        <button data-tab="file" class="btn tab-button p-3 font-semibold rounded-lg flex items-center justify-center gap-2 bg-input-bg text-text-muted">
+                            <i class="ph ph-file"></i> File
+                        </button>
+                    </div>
+                    <textarea id="caption" rows="3" class="form-textarea bg-input-bg border border-border w-full p-3 rounded-lg" placeholder="Tulis pesan atau caption di sini..."></textarea>
+                    <div id="media-input-area" class="hidden space-y-4">
+                        <div class="flex items-center justify-center p-1 rounded-full bg-input-bg">
+                            <button id="upload-mode-btn" class="btn flex-1 px-4 py-1.5 rounded-full text-sm font-semibold bg-accent text-white">Upload</button>
+                            <button id="url-mode-btn" class="btn flex-1 px-4 py-1.5 rounded-full text-sm font-semibold text-text-muted">URL</button>
+                        </div>
+                        <div id="upload-container">
+                            <label for="fileUpload" class="border-2 border-dashed border-border flex flex-col items-center justify-center w-full h-24 rounded-lg cursor-pointer hover:border-accent hover:bg-input-bg transition">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="ph-duotone ph-cloud-arrow-up text-4xl text-text-muted"></i>
+                                    <p id="upload-text" class="mb-2 text-sm text-text-muted">
+                                        <span class="font-semibold">Klik untuk mengunggah</span>
+                                    </p>
+                                </div>
+                                <input id="fileUpload" type="file" class="hidden" />
+                            </label>
+                        </div>
+                        <div id="url-container" class="hidden">
+                            <input type="text" id="mediaUrl" class="form-input bg-input-bg border border-border w-full p-3 rounded-lg" placeholder="Tempel URL media di sini...">
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-border space-y-3">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="unstoppableSpam" class="h-4 w-4 rounded form-input bg-input-bg border-border text-accent focus:ring-accent">
+                            <label for="unstoppableSpam" class="ml-2 block text-sm">Spam Tanpa Henti</label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" id="spamCount" class="form-input bg-input-bg border border-border p-2 rounded-lg text-sm" placeholder="Jumlah (mis: 100)">
+                            <input type="number" id="spamDelay" class="form-input bg-input-bg border border-border p-2 rounded-lg text-sm" placeholder="Jeda (ms, mis: 500)">
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="sendOnceBtn" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                                <span class="btn-text">Kirim Sekali</span>
+                            </button>
+                            <button id="startSpamBtn" class="btn w-full text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover">
+                                <span class="btn-text">Mulai Spam</span>
+                            </button>
+                        </div>
+                        <button id="stopSpamBtn" class="btn w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>Hentikan</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-1 space-y-6">
+                <div class="card bg-card border border-border p-6 rounded-xl shadow-lg h-[85vh] flex flex-col fade-in" style="animation-delay: 300ms;">
+                    <h2 class="text-xl font-bold flex items-center gap-2 border-b border-border pb-2 mb-4">
+                        <i class="ph-duotone ph-chat-teardrop-dots"></i> Monitor & Balas Pesan
+                    </h2>
+                    <div id="messageMonitor" class="flex-grow overflow-y-auto space-y-3 pr-2">
+                        <p class="text-text-muted">Menunggu token bot yang valid...</p>
+                    </div>
+                    <button id="clearMonitorBtn" class="btn w-full text-xs mt-4 py-2 bg-slate-200 dark:bg-slate-700/50 hover:bg-slate-300 dark:hover:bg-slate-600">Bersihkan Monitor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
